@@ -94,7 +94,7 @@ public class ConstructionTrainer extends Script implements PaintInfo, Painting, 
 
     private boolean openGUI() {
         try {
-            //fxml = new File("C:\\Users\\Boaz\\Dropbox\\TRiBot scripts\\scripts\\construction\\src\\scripts\\gui\\ConstructionGUI.fxml").toURI().toURL();
+            //fxml = new File("C:\\Users\\NameLeaked\\Dropbox\\TRiBot scripts\\scripts\\construction\\src\\scripts\\gui\\ConstructionGUI.fxml").toURI().toURL();
             fxml = new URL("https://raw.githubusercontent.com/botuser420/tribot-resources/main/construction/ConstructionGUI.fxml");
         } catch (MalformedURLException e) {
             e.printStackTrace();
