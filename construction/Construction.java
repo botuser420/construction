@@ -3,7 +3,6 @@ package scripts.construction;
 import org.tribot.api.General;
 import org.tribot.api.input.Keyboard;
 import org.tribot.api2007.*;
-import org.tribot.api2007.Objects;
 import org.tribot.api2007.types.*;
 import scripts.NPC;
 import scripts.Sleep;
@@ -19,7 +18,7 @@ import scripts.items.Item;
 import scripts.items.ItemList;
 import scripts.magic.Spell;
 import scripts.quests.requirements.item.ItemRequirement;
-import scripts.utilities.Object;
+import scripts.utilities.ObjectUtil;
 
 import java.util.*;
 
@@ -40,7 +39,7 @@ public class Construction extends EventFramework {
         furnitureSet.addAll(Arrays.asList(Furniture.OAK_LARDER, Furniture.OAK_ARMCHAIR, Furniture.OAK_CHAIR, Furniture.WOODEN_CHAIR, Furniture.CRUDE_WOODEN_CHAIR));
     }
 
-    public Construction(int stopLevel, List<Furniture> furnitureList) {
+    public Construction(List<Furniture> furnitureList, int stopLevel) {
         this.stopLevel = stopLevel;
         this.furnitureSet.addAll(furnitureList);
         itemRequirements = Furniture.getItemRequirements(stopLevel, furnitureSet);
@@ -56,11 +55,11 @@ public class Construction extends EventFramework {
                 Sleep.till(() -> House.isInHouse());
             }
         } else if (RIMMINGTON.contains(Player.getPosition())) {
-            if (furniture != null && !furniture.plankType.equals(Plank.REGULAR)){
+            if (furniture != null && !furniture.plankType.equals(Plank.REGULAR)) {
                 Inventory.drop(ItemList.getIds(Arrays.asList(Plank.REGULAR.getItemRequirements())));
             }
             if (Inventory.isFull() || getNotedPlanksId() == -1) {
-                if (Object.click(ObjectID.PORTAL_15478, "Build mode", new RSTile(2953, 3224, 0)))
+                if (ObjectUtil.click(ObjectID.PORTAL_15478, "Build mode", new RSTile(2953, 3224, 0)))
                     Sleep.till(() -> House.isInHouse());
             } else
                 unNote();
@@ -94,7 +93,7 @@ public class Construction extends EventFramework {
 
     private void trainConstruction(Furniture furniture) {
         this.furniture = furniture;
-        RSObject[] furnitureObject = Objects.findNearest(25, furniture.getObjectName(), furniture.getObjectName() + " space");
+        RSObject[] furnitureObject = org.tribot.api2007.Objects.findNearest(25, furniture.getObjectIds());
         if (furnitureObject.length > 0) {
             if (Interfaces.isInterfaceSubstantiated(CONSTRUCTION_MASTER)) {
                 Keyboard.typeKeys(furniture.getBuildKey());
@@ -105,8 +104,9 @@ public class Construction extends EventFramework {
             } else if (NPCChat.getOptions() != null) {
                 Keyboard.typeKeys('1');
                 Sleep.till(() -> objectDisappeared(furnitureObject[0]));
-            } else if (!furnitureObject[0].isClickable()) {
+            } else if (House.isViewerOpen())
                 House.closeViewer();
+            else if (!furnitureObject[0].isClickable()) {
                 if (Walking.blindWalkTo(Walk.getCloserTile(furnitureObject[0].getPosition(), General.random(1, 2))))
                     Sleep.till(() -> furnitureObject[0].isOnScreen());
             } else if (AccurateMouse.click(furnitureObject[0], "Build", "Remove")) {
@@ -156,7 +156,7 @@ public class Construction extends EventFramework {
     }
 
     private boolean objectDisappeared(RSObject object) {
-        return Objects.findNearest(1, object.getID()).length == 0;
+        return org.tribot.api2007.Objects.findNearest(1, object.getID()).length == 0;
     }
 
     private void typeKey(List<String> options) {

@@ -1,12 +1,12 @@
 package scripts.construction;
 
 import lombok.Getter;
-import obf.Ge;
 import org.tribot.api.General;
 import org.tribot.api2007.Skills;
 import scripts.construction.house.Room;
 import scripts.data.ItemCollections;
 import scripts.data.ItemID;
+import scripts.data.ObjectID;
 import scripts.items.ItemList;
 import scripts.magic.Spell;
 import scripts.quests.requirements.item.ItemRequirement;
@@ -14,17 +14,17 @@ import scripts.quests.requirements.item.ItemRequirement;
 import java.util.*;
 
 public enum Furniture {
-    OAK_LARDER("Oak Larder", 33, 8, Plank.OAK, '2', Room.KITCHEN, "Larder"),
-    CARVED_OAK_TABLE("Carved Oak Table", 31, 6, Plank.OAK, '3', Room.DINING, "Table"),
-    OAK_ARMCHAIR("Oak Armchair", 29, 3, Plank.OAK, '5', Room.PARLOUR, "Chair"),
-    OAK_DINING_TABLE("Oak Dining Table", 22, 4, Plank.OAK, '2', Room.DINING, "Table"),
-    OAK_CHAIR("Oak Chair", 19, 2, Plank.OAK, '4', Room.PARLOUR, "Chair"),
+    OAK_LARDER("Oak Larder", 33, 8, Plank.OAK, '2', Room.KITCHEN, ObjectID.LARDER_SPACE, ObjectID.LARDER_13565, ObjectID.LARDER_13566, ObjectID.LARDER_13567),
+    CARVED_OAK_TABLE("Carved Oak Table", 31, 6, Plank.OAK, '3', Room.DINING, ObjectID.TABLE_SPACE, ObjectID.WOODEN_TABLE_13293, ObjectID.OAK_TABLE, ObjectID.OAK_TABLE_13295, ObjectID.TEAK_TABLE_13296),
+    OAK_ARMCHAIR("Oak Armchair", 29, 3, Plank.OAK, '5', Room.PARLOUR, ObjectID.CHAIR_SPACE_4517, ObjectID.CHAIR_SPACE_4516, ObjectID.CHAIR_SPACE, ObjectID.CHAIR_6752, ObjectID.CHAIR_6753, ObjectID.CHAIR_6754, ObjectID.CHAIR_6755, ObjectID.CHAIR_6756, ObjectID.CHAIR_6757, ObjectID.CHAIR_6758),
+    OAK_DINING_TABLE("Oak Dining Table", 22, 4, Plank.OAK, '2', Room.DINING, ObjectID.TABLE_SPACE, ObjectID.WOODEN_TABLE_13293, ObjectID.OAK_TABLE, ObjectID.OAK_TABLE_13295, ObjectID.TEAK_TABLE_13296),
+    OAK_CHAIR("Oak Chair", 19, 2, Plank.OAK, '4', Room.PARLOUR, ObjectID.CHAIR_SPACE_4517, ObjectID.CHAIR_SPACE_4516, ObjectID.CHAIR_SPACE, ObjectID.CHAIR_6752, ObjectID.CHAIR_6753, ObjectID.CHAIR_6754, ObjectID.CHAIR_6755, ObjectID.CHAIR_6756, ObjectID.CHAIR_6757, ObjectID.CHAIR_6758),
     //CRAFTING_TABLE1(16, 4, Plank.OAK, '1', Room.KITCHEN, "Chair"),
     //REPAIR_BENCH(15, 2, Plank.OAK, '1', Room.KITCHEN, "Chair"),
-    WOODEN_LARDER("Wooden Larder", 9, 8, Plank.REGULAR, '1', Room.KITCHEN, "Larder"),
-    WOODEN_CHAIR("Wooden Chair", 8, 3, Plank.REGULAR, '2', Room.PARLOUR, "Chair"),
-    WOODEN_BOOKCASE("Wooden Bookcase", 4, 4, Plank.REGULAR, '1', Room.PARLOUR, "Bookcase"),
-    CRUDE_WOODEN_CHAIR("Crude Wooden Chair", 1, 2, Plank.REGULAR, '1', Room.PARLOUR, "Chair");
+    WOODEN_LARDER("Wooden Larder", 9, 8, Plank.REGULAR, '1', Room.KITCHEN, ObjectID.LARDER_SPACE, ObjectID.LARDER_13565, ObjectID.LARDER_13566, ObjectID.LARDER_13567),
+    WOODEN_CHAIR("Wooden Chair", 8, 3, Plank.REGULAR, '2', Room.PARLOUR, ObjectID.CHAIR_SPACE_4517, ObjectID.CHAIR_SPACE_4516, ObjectID.CHAIR_SPACE, ObjectID.CHAIR_6752, ObjectID.CHAIR_6753, ObjectID.CHAIR_6754, ObjectID.CHAIR_6755, ObjectID.CHAIR_6756, ObjectID.CHAIR_6757, ObjectID.CHAIR_6758),
+    WOODEN_BOOKCASE("Wooden Bookcase", 4, 4, Plank.REGULAR, '1', Room.PARLOUR, ObjectID.BOOKCASE_SPACE, ObjectID.BOOKCASE_6768, ObjectID.BOOKCASE_6769, ObjectID.BOOKCASE_6770),
+    CRUDE_WOODEN_CHAIR("Crude Wooden Chair", 1, 2, Plank.REGULAR, '1', Room.PARLOUR, ObjectID.CHAIR_SPACE_4517, ObjectID.CHAIR_SPACE_4516, ObjectID.CHAIR_SPACE, ObjectID.CHAIR_6752, ObjectID.CHAIR_6753, ObjectID.CHAIR_6754, ObjectID.CHAIR_6755, ObjectID.CHAIR_6756, ObjectID.CHAIR_6757, ObjectID.CHAIR_6758);
 
     @Getter
     String name;
@@ -48,11 +48,11 @@ public enum Furniture {
     Room room;
 
     @Getter
-    String objectName;
+    int[] objectIds;
 
     int experienceGiven;
 
-    Furniture(String name, int reqLvl, int neededPlanks, Plank plankType, Character buildKey, Room room, String objectName) {
+    Furniture(String name, int reqLvl, int neededPlanks, Plank plankType, Character buildKey, Room room, int... objectIds) {
         this.name = name;
         this.reqLvl = reqLvl;
         this.neededPlanks = neededPlanks;
@@ -60,7 +60,7 @@ public enum Furniture {
         this.itemRequirements = ItemList.multiply(Arrays.asList(plankType.getItemRequirements()), neededPlanks, false);
         this.buildKey = buildKey;
         this.room = room;
-        this.objectName = objectName;
+        this.objectIds = objectIds;
         experienceGiven = neededPlanks * plankType.getExperienceGiven();
     }
 

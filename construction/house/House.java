@@ -117,12 +117,10 @@ public class House {
     }
 
     private static boolean selectSquare(Room room) {
-        RSInterface roomSquares = Interfaces.get(VIEWER, i -> i.getWidth() == 256 && i.getHeight() == 256);
+        RSInterface roomSquares = Interfaces.get(VIEWER, i -> i.getChildren() != null && i.getChildren().length == 243);
         if (roomSquares != null) {
-            Optional<RSInterface> roomSquare = Arrays.stream(roomSquares.getChildren())
-                    .filter(i -> i.getChildren().length == 243)
-                    .findFirst();
-            if (roomSquare.isPresent() && roomSquare.get().click() && Sleep.till(() -> ChooseOption.getOptions() != null) &&
+            RSInterface roomSquare = roomSquares.getChild(room.getRoomIndex());
+            if (roomSquare != null && roomSquare.click() && Sleep.till(() -> ChooseOption.getOptions() != null) &&
                     ChooseOption.select("Add room"))
                 return Sleep.till(() -> isRoomCreationOpen());
         }

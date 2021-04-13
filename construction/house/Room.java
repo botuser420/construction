@@ -3,12 +3,12 @@ package scripts.construction.house;
 import lombok.Getter;
 
 public enum Room {
-    PARLOUR(1, 101, 1368, 1000, "Parlour", Floor.GROUND),
-    GARDEN(1, 92, 1369, 1000, "Garden", Floor.GROUND),
-    KITCHEN(5, 93, 1370, 5000, "Kitchen", Floor.GROUND),
-    DINING(10, 91, 1371, 5000, "Dining room", Floor.GROUND),
-    WORKSHOP(15, 100, 1377, 10000, "Workshop", Floor.GROUND),
-    BEDROOM(20, 102, 1372, 10000, "Bedroom", Floor.GROUND);
+    PARLOUR(1, 100, 1368, 1000, "Parlour", Floor.GROUND),
+    GARDEN(1, 91, 1369, 1000, "Garden", Floor.GROUND),
+    KITCHEN(5, 92, 1370, 5000, "Kitchen", Floor.GROUND),
+    DINING(10, 90, 1371, 5000, "Dining room", Floor.GROUND),
+    WORKSHOP(15, 99, 1377, 10000, "Workshop", Floor.GROUND),
+    BEDROOM(20, 101, 1372, 10000, "Bedroom", Floor.GROUND);
     //SKILL_HALL(25, 15000, "Skill hall");
 
     @Getter
