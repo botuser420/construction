@@ -6,10 +6,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import org.tribot.api.General;
 import org.tribot.util.Util;
 import scripts.ConstructionTrainer;
@@ -20,12 +23,14 @@ import scripts.utilities.FileUtilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @DoNotRename
-public class Controller {
+public class Controller implements Initializable {
 
     private final String profilePath = "\\BreakerScripts\\Construction\\";
     DecimalFormat format = new DecimalFormat("#");
@@ -35,76 +40,101 @@ public class Controller {
     @Getter
     private GUI gui = null;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnProfiles;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnScriptSettings;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnSettings;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnAntiban;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnHelp;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnStart;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnRight;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Button btnLeft;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Pane pnlProfiles;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Pane pnlScriptSettings;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Pane pnlSettings;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Pane pnlAntiban;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private Pane pnlHelp;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TitledPane arguments;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private ListView<String> listProfiles = new ListView<>();
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TableView<Furniture> tableAvailable;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TableColumn<Furniture, String> availName;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TableColumn<Furniture, Number> availLvl;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TableView<Furniture> tableUsed;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TableColumn<Furniture, String> usedName;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TableColumn<Furniture, Number> usedLvl;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TextField textProfileName;
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     private TextField stopLvl = new TextField();
 
-    public void initialize() throws IOException {
+    @SneakyThrows
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
         createDirectory();
         populateMethods();
         readProfiles();
@@ -119,7 +149,8 @@ public class Controller {
         listProfiles.getItems().setAll(FileUtilities.getFileNamesWithoutExtension(profilePath));
     }
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     public void saveProfile(ActionEvent event) {
         sortTable();
         if (event.getSource() == btnStart)
@@ -134,7 +165,8 @@ public class Controller {
         }
     }
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     public void loadProfile(ActionEvent event) throws IOException {
         if (!listProfiles.getSelectionModel().getSelectedItem().isEmpty()) {
             loadProfile(listProfiles.getSelectionModel().getSelectedItem());
@@ -150,7 +182,8 @@ public class Controller {
         textProfileName.setText(profileName);
     }
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     public void deleteProfile(ActionEvent event) throws IOException {
         if (!listProfiles.getSelectionModel().getSelectedItem().isEmpty()) {
             FileUtilities.deleteFile(profilePath + listProfiles.getSelectionModel().getSelectedItem() + ".json");
@@ -165,9 +198,10 @@ public class Controller {
         availLvl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getReqLvl()));
         usedName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         usedLvl.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getReqLvl()));
-        if (FileUtilities.checkExistance(profilePath + "last.json"))
+        if (FileUtilities.checkExistance(profilePath + "last.json")) {
+            General.println("Loading last settings");
             loadProfile("last");
-        else {
+        } else {
             General.println("Profile last not found");
             tableAvailable.getItems().addAll(Furniture.values());
         }
@@ -192,7 +226,8 @@ public class Controller {
         }));
     }
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     public void transferMethod(ActionEvent event) {
         if (event.getSource() == btnRight && !tableAvailable.getSelectionModel().isEmpty()) {
             Furniture furniture = tableAvailable.getSelectionModel().getSelectedItem();
@@ -208,7 +243,8 @@ public class Controller {
         }
     }
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
     public void handleClicks(ActionEvent event) {
         if (event.getSource() == btnProfiles) {
             pnlProfiles.toFront();
@@ -227,12 +263,21 @@ public class Controller {
         }
     }
 
-    @FXML @DoNotRename
-    public void closeGui() {
+    @FXML
+    @DoNotRename
+    public void closeGui() throws Exception {
+        gui.stopScript = true;
         gui.close();
     }
 
-    @FXML @DoNotRename
+    @FXML
+    @DoNotRename
+    public void minimizeGui() throws Exception {
+        ((Stage) gui.getScene().getWindow()).setIconified(true);
+    }
+
+    @FXML
+    @DoNotRename
     public void startScript(ActionEvent event) {
         if (tableUsed.getItems().isEmpty()) {
             General.println("No items to build selected. Try again....");
@@ -246,8 +291,8 @@ public class Controller {
         saveProfile(event);
 
         List<Furniture> furniture = tableUsed.getItems();
-        ConstructionTrainer.events.addAll(new Construction(Integer.parseInt(stopLvl.getText()), furniture), new BuyHouse());
-        closeGui();
+        ConstructionTrainer.events.addAll(new Construction(furniture, Integer.parseInt(stopLvl.getText())), new BuyHouse());
+        gui.close();
 
     }
 

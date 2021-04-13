@@ -26,6 +26,8 @@ public class GUI extends Application {
     private Controller controller;
     private boolean decorated = true;
 
+    public boolean stopScript = false;
+
     private static double xOffset = 0;
     private static double yOffset = 0;
 

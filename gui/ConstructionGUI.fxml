@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import scripts.utilities.fonts.glyphs.fontawesome.FontAwesomeIconView?>
-
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
@@ -24,6 +22,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
+<?import scripts.utilities.fonts.glyphs.fontawesome.FontAwesomeIconView?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="750.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scripts.gui.Controller">
     <children>
         <VBox alignment="TOP_CENTER" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -70,8 +69,6 @@
                 </Button>
                 <Button fx:id="btnHelp" alignment="BASELINE_LEFT" graphicTextGap="22.0" mnemonicParsing="false" onAction="#handleClicks" prefHeight="42.0" prefWidth="250.0" styleClass="menu-button" text="Support" textAlignment="RIGHT" textFill="WHITE">
                <graphic>
-               </graphic>
-               <graphic>
                   <FontAwesomeIconView glyphName="QUESTION" />
                </graphic>
                 </Button>
@@ -112,30 +109,30 @@
                   </Label>
                   <Button fx:id="btnRight" graphicTextGap="0.0" layoutX="225.0" layoutY="333.0" mnemonicParsing="false" onAction="#transferMethod" prefHeight="30.0" prefWidth="50.0">
                      <graphic>
-                        <FontAwesomeIconView glyphName="ANGLE_DOUBLE_RIGHT" size="24" />
+                        <FontAwesomeIconView glyphName="ANGLE_DOUBLE_RIGHT" glyphSize="24" />
                      </graphic>
                   </Button>
                   <Button fx:id="btnLeft" graphicTextGap="0.0" layoutX="225.0" layoutY="383.0" mnemonicParsing="false" onAction="#transferMethod" prefHeight="30.0" prefWidth="50.0">
                      <graphic>
-                        <FontAwesomeIconView glyphName="ANGLE_DOUBLE_LEFT" size="24" x="20.0" />
+                        <FontAwesomeIconView glyphName="ANGLE_DOUBLE_LEFT" glyphSize="24" />
                      </graphic>
                   </Button>
                   <CheckBox disable="true" layoutX="37.0" layoutY="149.0" mnemonicParsing="false" text="Buy House" />
                   <Label layoutX="14.0" layoutY="202.0" text="Available methods" />
                   <Label layoutX="286.0" layoutY="202.0" text="Used methods" />
-                  <TableView fx:id="tableAvailable" layoutX="14.0" layoutY="220.0" prefHeight="300.0" prefWidth="200.0">
+                  <TableView fx:id="tableAvailable" editable="true" layoutX="14.0" layoutY="220.0" prefHeight="300.0" prefWidth="200.0">
                     <columns>
-                      <TableColumn fx:id="availName" prefWidth="160.0" resizable="false" text="Name" />
-                      <TableColumn fx:id="availLvl" minWidth="0.0" prefWidth="53.0" resizable="false" text="Lvl" />
+                      <TableColumn fx:id="availName" minWidth="127.0" prefWidth="-1.0" text="Name" />
+                      <TableColumn fx:id="availLvl" minWidth="-Infinity" prefWidth="53.0" resizable="false" text="Lvl" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <TableView fx:id="tableUsed" layoutX="286.0" layoutY="220.0" prefHeight="300.0" prefWidth="200.0">
+                  <TableView fx:id="tableUsed" editable="true" layoutX="286.0" layoutY="220.0" prefHeight="300.0" prefWidth="200.0">
                      <columns>
-                        <TableColumn fx:id="usedName" prefWidth="160.0" resizable="false" text="Name" />
-                        <TableColumn fx:id="usedLvl" prefWidth="53.0" resizable="false" text="Lvl" />
+                        <TableColumn fx:id="usedName" minWidth="127.0" prefWidth="-1.0" text="Name" />
+                        <TableColumn fx:id="usedLvl" editable="false" minWidth="-Infinity" prefWidth="53.0" resizable="false" text="Lvl" />
                      </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -180,7 +177,7 @@
                         <Insets />
                      </opaqueInsets>
                   </Label>
-                  <Accordion layoutX="-1.0" layoutY="81.0" prefHeight="250.0" prefWidth="500.0" expandedPane="$arguments">
+                  <Accordion layoutX="-1.0" layoutY="81.0" prefHeight="250.0" prefWidth="500.0">
                     <panes>
                       <TitledPane fx:id="arguments" text="Which arguments are supported?">
                         <content>
@@ -250,7 +247,7 @@
                   <Hyperlink layoutX="189.0" layoutY="444.0" prefHeight="30.0" text="Script thread" />
                   <ImageView fitHeight="100.0" fitWidth="110.0" layoutX="50.0" layoutY="380.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../../Pictures/photo-224685.png" />
+                        <Image url="https://raw.githubusercontent.com/botuser420/tribot-resources/main/photo-224685.png" />
                      </image>
                   </ImageView>
                   <Circle fill="TRANSPARENT" layoutX="100.0" layoutY="430.0" radius="50.0" stroke="#252525" strokeType="OUTSIDE" strokeWidth="30.0" />
@@ -292,7 +289,8 @@
                 </Pane>
             </children>
         </StackPane>
-      <FontAwesomeIconView fx:id="btnClose" fill="WHITE" glyphName="TIMES" onMouseClicked="#closeGui" selectionEnd="1" selectionStart="1" size="20" strokeType="INSIDE" styleClass="close-icon" textAlignment="RIGHT" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
+      <FontAwesomeIconView glyphName="MINUS" glyphSize="18" onMouseClicked="#minimizeGui" styleClass="close-icon" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0" />
+      <FontAwesomeIconView fx:id="btnClose" glyphName="TIMES" glyphSize="18" onMouseClicked="#closeGui" styleClass="close-icon" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" />
     </children>
     <effect>
         <DropShadow color="#1b1eeb" />

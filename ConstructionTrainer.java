@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import org.tribot.api.General;
 import org.tribot.api2007.Login;
 import org.tribot.api2007.Player;
+import org.tribot.api2007.Skills;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Arguments;
@@ -13,13 +14,13 @@ import org.tribot.script.interfaces.Starting;
 import org.tribot.util.Util;
 import scripts.construction.Construction;
 import scripts.construction.house.BuyHouse;
-import scripts.data.GameState;
 import scripts.dax.api_lib.DaxWalker;
 import scripts.framework.event.EventSet;
 import scripts.gui.GUI;
 import scripts.gui.GuiSettings;
 import scripts.paint.PaintInfo;
 import scripts.paint.SimplePaint;
+import scripts.paint.SkillTracker;
 import scripts.utilities.FileUtilities;
 
 import java.awt.*;
@@ -44,22 +45,28 @@ public class ConstructionTrainer extends Script implements PaintInfo, Painting, 
 
     private final SimplePaint PAINT = new SimplePaint(this, SimplePaint.PaintLocations.TOP_MID_PLAY_SCREEN,
             new Color[]{new Color(255, 251, 255)}, "Trebuchet MS", new Color[]{new Color(50, 50, 50, 128)},
-            new Color[]{new Color(50, 50, 50)}, 1, false, 5, 3, 0);
+            new Color[]{new Color(50, 50, 50)}, 2, false, 3, 5, 0);
+
+    private final SkillTracker skillTracker = new SkillTracker(Skills.SKILLS.CONSTRUCTION, this);
 
     public String[] getPaintInfo() {
         return new String[]{
                 "Runtime: " + PAINT.getRuntimeString(),
                 events.getString(),
-                events.getStatus(),
+                skillTracker.getXpText(),
+                skillTracker.getLevelText()
         };
     }
 
     @SneakyThrows
     @Override
     public void run() {
-        if (profileName == null)
-            openGUI();
-        else
+        if (profileName == null) {
+            if (openGUI()) {
+                General.println("Closed GUI. Stopping script.");
+                return;
+            }
+        } else
             loadProfile();
         login();
         events.execute();
@@ -85,8 +92,9 @@ public class ConstructionTrainer extends Script implements PaintInfo, Painting, 
         return true;
     }
 
-    private void openGUI() {
+    private boolean openGUI() {
         try {
+            //fxml = new File("C:\\Users\\Boaz\\Dropbox\\TRiBot scripts\\scripts\\construction\\src\\scripts\\gui\\ConstructionGUI.fxml").toURI().toURL();
             fxml = new URL("https://raw.githubusercontent.com/botuser420/tribot-resources/main/construction/ConstructionGUI.fxml");
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -96,6 +104,7 @@ public class ConstructionTrainer extends Script implements PaintInfo, Painting, 
         gui.show();
         while (gui.isOpen())
             sleep(500);
+        return gui.stopScript;
     }
 
     @Override
@@ -117,7 +126,7 @@ public class ConstructionTrainer extends Script implements PaintInfo, Painting, 
         General.println("Loading profile " + profileName);
         try {
             GuiSettings settings = new Gson().fromJson(new String(FileUtilities.loadFile(new File(Util.getWorkingDirectory().getAbsolutePath() + "\\BreakerScripts\\Construction\\" + profileName + ".json"))), GuiSettings.class);
-            events.addAll(new Construction(Integer.parseInt(settings.getStopLevel()), settings.getTableUsed()), new BuyHouse());
+            events.addAll(new Construction(settings.getTableUsed(), Integer.parseInt(settings.getStopLevel())), new BuyHouse());
         } catch (NumberFormatException exception) {
             General.println(exception);
         }
